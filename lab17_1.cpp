@@ -2,6 +2,7 @@
 #include<fstream>
 #include<vector>
 #include<string>
+#include<cstring>
 #include<cstdlib>
 
 using namespace std;
@@ -20,20 +21,64 @@ string toUpperStr(string x){
     return y;
 }
 
-void importDataFromFile(){
+void importDataFromFile(string file, vector<string> &name, vector<int> &score, vector<char> &letter){
+    ifstream read;
+    read.open(file.c_str());
+    int a, b, c;
+    string holder;
+    char name_hold[100];
+    char form[]="%[^:]: %d %d %d";
+    while(getline(read, holder)){
+        sscanf(holder.c_str(),form,name_hold,&a,&b,&c);
+        name.push_back(name_hold);
+        score.push_back(a+b+c);
+        letter.push_back(score2grade(a+b+c));
+    }
+    read.close();
+}
+
+void getCommand(string &c1, string &key){
+    string holder;
+    cout<<"Please input your command: ";
+    getline(cin, holder);
+     int an=holder.find_first_of(" ");
+    c1=holder.substr(0,an);
+    key=holder.substr(an+1);
+}
+
+void searchName(vector<string> nam, vector<int> scr, vector<char> lett, string key){
+    cout<<"---------------------------------"<<endl;
+    int posi;
+    bool check=false;
+    for(unsigned int i=0;i<nam.size();i++){
+        if(toUpperStr(nam[i])==toUpperStr(key)){
+            posi=i;
+            check=true;
+            cout<<nam.at(posi)<<"'s score = "<<scr.at(posi)<<endl<<nam.at(posi)<<"'s grade = "<<lett.at(posi)<<endl;
+            break;
+        }
+    }
+        
+    if(!check){
+        cout<<"Cannot found."<<endl;
+    }
+    cout<<"---------------------------------"<<endl;
+    
 
 }
 
-void getCommand(){
+void searchGrade(vector<string> nam, vector<int> scr, vector<char> lett, string key){
+    cout<<"---------------------------------"<<endl;
 
-}
+    for(unsigned int i=0;i<nam.size();i++)
+    {
+        if(key[0]==lett[i]){
+            cout<<nam[i]<<" ("<<scr[i]<<")"<<endl;
+        }
+    }
+    
 
-void searchName(){
-
-}
-
-void searchGrade(){
-
+    cout<<"---------------------------------"<<endl;
 }
 
 
